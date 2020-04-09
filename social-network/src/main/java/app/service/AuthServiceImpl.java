@@ -29,7 +29,6 @@ public class AuthServiceImpl {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .build();
 
-
         try {
 
             usersRepository.save(user);
@@ -54,7 +53,7 @@ public class AuthServiceImpl {
             throw new NotBoundException();
         }
 
-        if(!passwordEncoder.matches(dto.getPassword(),user.get().getPassword())) {
+        if(!passwordEncoder.matches(dto.getPassword(), user.get().getPassword())) {
             throw new NotBoundException();
         }
 

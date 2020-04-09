@@ -20,7 +20,6 @@ public class RegController {
 
     @RequestMapping(value = "/reg", method = RequestMethod.GET)
     public ModelAndView showReg() {
-        Logger.green_write("GET METHOD FROM RegController");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("reg");
         return modelAndView;
@@ -29,7 +28,6 @@ public class RegController {
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     public String register(Model model, @ModelAttribute("registration") RegistrationDto registrationDto) {
         Logger.green_write("Post method from regController");
-        System.out.println(registrationDto);
 
         User user = authService.register(registrationDto);
 

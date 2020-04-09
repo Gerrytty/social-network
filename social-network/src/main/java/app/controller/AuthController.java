@@ -30,7 +30,7 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public String auth(@ModelAttribute("authentication")AuthenticationDto authenticationDto) {
+    public String auth(@ModelAttribute("authentication") AuthenticationDto authenticationDto) {
         Logger.green_write("Post method from authController");
 
         User user;
@@ -41,7 +41,8 @@ public class AuthController {
             return "redirect:/auth";
         }
 
-        return "redirect:/profile?id=" + user.getUserId();
+
+        return "redirect:/profile";
 
     }
 

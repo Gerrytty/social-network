@@ -17,5 +17,8 @@
 
 </form>
 
+<br>
+<button onclick="location.href='/reg'">Registration</button>
+
 </body>
 </html>

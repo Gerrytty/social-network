@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<br><br>
+<br>
 
 <div class="row">
 
@@ -34,6 +34,7 @@
         <a href="">Messages</a> <br>
         <a href="">Friends</a> <br>
         <a href="">Photos</a> <br>
+        <a href="">Settings</a> <br>
 
     </div>
 
@@ -98,9 +99,9 @@
 
     <div class="col">
 
-        <form method="post">
+        <form method="post" action="/addPost">
 
-            <input type="text" placeholder="What do you want to post?"> <br>
+            <input type="text" name="text" placeholder="What do you want to post?"> <br>
             <input type="submit" placeholder="Add">
 
         </form>
@@ -111,6 +112,36 @@
 
     </div>
 </div>
+
+<br>
+
+<#list posts as post>
+
+    <div class="row">
+
+        <div class="col"></div>
+
+        <div class="col">
+
+            <div class="container">
+
+                <p>${post.authorId}</p>
+
+                <p>${post.date}</p>
+
+                <p>${post.text}</p>
+
+            </div>
+
+        </div>
+
+        <div class="col"></div>
+
+    </div>
+
+    <hr style="color: black"><br>
+
+</#list>
 
 </body>
 </html>

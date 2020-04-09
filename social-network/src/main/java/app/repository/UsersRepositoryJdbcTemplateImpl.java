@@ -44,7 +44,6 @@ public class UsersRepositoryJdbcTemplateImpl implements UsersRepository {
                     .build();
 
 
-
     public Optional<User> find(Long id) {
         try {
             User user = jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new Object[]{id}, userRowMapper);
