@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<form method="post" action="auth">
+<form method="post" action="auth/process">
 
     <input type="email" name="email" placeholder="Enter your email..."> </br> </br>
     <input type="password" name="password" placeholder="Enter your password..."></br> </br>

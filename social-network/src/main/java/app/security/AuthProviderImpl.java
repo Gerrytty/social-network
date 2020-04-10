@@ -20,6 +20,24 @@ import java.util.Optional;
 @Component
 public class AuthProviderImpl implements AuthenticationProvider {
 
+    private User user;
+
+    public AuthProviderImpl(User user) {
+        this.user = user;
+    }
+
+    public AuthProviderImpl() {
+
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
     @Autowired
     private UsersRepository userRepository;
 
@@ -28,7 +46,7 @@ public class AuthProviderImpl implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+//        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         String email = authentication.getName();
         Optional<User> user = userRepository.findByEmail(email);
         if (!user.isPresent()) {
@@ -38,6 +56,7 @@ public class AuthProviderImpl implements AuthenticationProvider {
         if (!passwordEncoder.matches(password, user.get().getPassword())) {
             throw new BadCredentialsException("Bad credentials");
         }
+        this.user = user.get();
         List<GrantedAuthority> authorities = new ArrayList<>();
         return new UsernamePasswordAuthenticationToken(user, null, authorities);
     }

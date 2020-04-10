@@ -1,5 +1,7 @@
 package app.controller;
 
+import app.repository.interfaces.UsersRepository;
+
 import org.springframework.security.core.Authentication;
 import app.model.User;
 import app.service.PostServiceImpl;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.rmi.NotBoundException;
+import java.util.Optional;
 
 @Controller
 public class ProfileController {
@@ -24,25 +27,45 @@ public class ProfileController {
     @Autowired
     PostServiceImpl postService;
 
+    @Autowired
+    UsersRepository usersRepository;
+
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public ModelAndView show(@RequestParam(defaultValue = "1") Long id) {
+    public ModelAndView show(Authentication authentication, @RequestParam(defaultValue = "1") Long id) {
 
         Logger.green_write("GET METHOD FROM ProfileController");
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("profile");
 
-//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//        User user = userDetails.getUser();
-//        model.addAttribute("user", user);
+        Optional<User> optionalUser = (Optional<User>) authentication.getPrincipal();
+
+        User user = new User();
+
+        if(id == 1) {
+            user = optionalUser.get();
+            id = user.getUserId();
+        }
+
+        else {
+            optionalUser = usersRepository.find(id);
+
+            if(!optionalUser.isPresent()) {
+                modelAndView.setViewName("error");
+            }
+
+            else {
+                user = optionalUser.get();
+            }
+
+        }
 
         try {
-            modelAndView.addObject("user", profileService.getProfileInfo(id));
+            modelAndView.addObject("user", profileService.getProfileInfo(user));
 
-            // TODO: replace 1
-            modelAndView.addObject("userId", 1);
-            modelAndView.addObject("posts", postService.getPosts(1));
+            modelAndView.addObject("userId", user);
+            modelAndView.addObject("posts", postService.getPosts(id));
 
         } catch (NotBoundException e) {
 

@@ -15,19 +15,19 @@ public class ProfileServiceImpl {
     @Autowired
     private UsersRepository usersRepository;
 
-    public ProfileInfoDto getProfileInfo(Long id) throws NotBoundException {
+    public ProfileInfoDto getProfileInfo(User user) throws NotBoundException {
 
-        Optional<User> user = usersRepository.find(id);
+//        Optional<User> user1 = usersRepository.find(user.getUserId());
+//
+//        if(!user.isPresent()) {
+//            throw new NotBoundException();
+//        }
 
-        if(!user.isPresent()) {
-            throw new NotBoundException();
-        }
-
-        else return ProfileInfoDto.builder()
-                .firstName(user.get().getFirstName())
-                .secondName(user.get().getSecondName())
-                .town(user.get().getTown())
-                .birthDate(user.get().getBirthDate())
+        return ProfileInfoDto.builder()
+                .firstName(user.getFirstName())
+                .secondName(user.getSecondName())
+                .town(user.getTown())
+                .birthDate(user.getBirthDate())
                 .build();
 
     }

@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/auth?error=true")
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/users")
+                .accessDeniedPage("/profile")
                 .and().logout();
     }
 

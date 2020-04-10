@@ -33,6 +33,8 @@ public class AuthController {
     public String auth(@ModelAttribute("authentication") AuthenticationDto authenticationDto) {
         Logger.green_write("Post method from authController");
 
+//        System.out.println("BBBBBBBBBBBBBBB");
+
         User user;
 
         try {

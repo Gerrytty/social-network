@@ -2,6 +2,7 @@ package app.service;
 
 import app.dto.PostDto;
 import app.model.Post;
+import app.model.User;
 import app.repository.interfaces.PostsRepository;
 import app.util.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class PostServiceImpl {
     @Autowired
     PostsRepository postsRepository;
 
-    public void addPost(PostDto postDto) {
+    public void addPost(PostDto postDto, User user) {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
@@ -28,8 +29,8 @@ public class PostServiceImpl {
         Post post = Post.builder()
                 .text(postDto.getText())
                 .date(new Date())
-                .authorId(1)
-                .whereId(1)
+                .authorId(user.getUserId())
+                .whereId(user.getUserId())
                 .build();
 
         postsRepository.save(post);
