@@ -29,12 +29,13 @@
 
     <div class="col-sm">
 
-        <a href="/profile?id=${userId}">My profile</a> <br>
+        <a href="/profile?id=${authUserId}">My profile</a> <br>
         <a href="">Fied</a> <br>
-        <a href="">Messages</a> <br>
-        <a href="">Friends</a> <br>
+        <a href="/chat">Forum</a> <br>
+        <a href="/users">Users</a> <br>
         <a href="">Photos</a> <br>
         <a href="">Settings</a> <br>
+        <a href="/logout">Logout</a> <br>
 
     </div>
 
@@ -60,6 +61,12 @@
 
             <div class="row">
                 <p>Town: town</p> <br>
+            </div>
+
+            <div class="row">
+                <#if authUserId != id>
+                    <a href="">Add as Friend</a>
+                </#if>
             </div>
 
         </div>
@@ -124,8 +131,6 @@
         <div class="col">
 
             <div class="container">
-
-                <p>${post.authorId}</p>
 
                 <p>${post.date}</p>
 

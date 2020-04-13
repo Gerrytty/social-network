@@ -22,14 +22,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthProviderImpl authProvider;
 
-//    @Autowired
-//    private UserDetailsService userDetailsService;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/reg", "/auth").anonymous()
-                .antMatchers("/users", "/profile", "/addPost").authenticated()
+                .antMatchers("/users", "/profile", "/addPost", "/chat").authenticated()
                 .and().csrf().disable()
                 .formLogin()
                 .loginPage("/auth")

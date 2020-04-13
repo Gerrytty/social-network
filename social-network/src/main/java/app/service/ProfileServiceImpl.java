@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.rmi.NotBoundException;
-import java.util.Optional;
 
 @Service
 public class ProfileServiceImpl {
@@ -16,12 +15,6 @@ public class ProfileServiceImpl {
     private UsersRepository usersRepository;
 
     public ProfileInfoDto getProfileInfo(User user) throws NotBoundException {
-
-//        Optional<User> user1 = usersRepository.find(user.getUserId());
-//
-//        if(!user.isPresent()) {
-//            throw new NotBoundException();
-//        }
 
         return ProfileInfoDto.builder()
                 .firstName(user.getFirstName())

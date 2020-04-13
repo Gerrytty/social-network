@@ -46,7 +46,7 @@ public class AuthProviderImpl implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-//        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
         String email = authentication.getName();
         Optional<User> user = userRepository.findByEmail(email);
         if (!user.isPresent()) {

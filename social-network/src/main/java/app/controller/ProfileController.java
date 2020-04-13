@@ -41,6 +41,8 @@ public class ProfileController {
 
         Optional<User> optionalUser = (Optional<User>) authentication.getPrincipal();
 
+        long authUserId = optionalUser.get().getUserId();
+
         User user = new User();
 
         if(id == 1) {
@@ -64,8 +66,9 @@ public class ProfileController {
         try {
             modelAndView.addObject("user", profileService.getProfileInfo(user));
 
-            modelAndView.addObject("userId", user);
+            modelAndView.addObject("authUserId", authUserId);
             modelAndView.addObject("posts", postService.getPosts(id));
+            modelAndView.addObject("id", id);
 
         } catch (NotBoundException e) {
 

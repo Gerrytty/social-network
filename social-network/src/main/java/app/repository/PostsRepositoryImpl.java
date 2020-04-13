@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,10 +23,10 @@ import java.util.Optional;
 @Component
 public class PostsRepositoryImpl implements PostsRepository {
 
-    private static final String SQL_SELECT_BY_ID = "select * from post where postId = ?";
-    private static final String SQL_SELECT_ALL = "select * from post";
+    private static final String SQL_SELECT_BY_ID = "select * from post where postId = ? order by date desc";
+    private static final String SQL_SELECT_ALL = "select * from post order by date desc";
     private static final String SQL_INSERT = "insert into post(authorId, whereId, text, date) values (?, ?, ?, ?)";
-    private static final String SQL_SELECT_ALL_BY_USER_ID = "select * from post where whereId = ?";
+    private static final String SQL_SELECT_ALL_BY_USER_ID = "select * from post where whereId = ? order by date desc";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -31,7 +34,7 @@ public class PostsRepositoryImpl implements PostsRepository {
     private RowMapper<Post> postRowMapper = (row, rowNumber) ->
             Post.builder()
                     .text(row.getString("text"))
-                    .date(row.getDate("date"))
+                    .date(row.getTimestamp("date"))
                     .whereId(row.getLong("whereId"))
                     .authorId(row.getLong("authorId"))
                     .build();
@@ -67,7 +70,7 @@ public class PostsRepositoryImpl implements PostsRepository {
             statement.setLong(1, entity.getAuthorId());
             statement.setLong(2, entity.getWhereId());
             statement.setString(3, entity.getText());
-            statement.setDate(4, new Date(entity.getDate().getTime()));
+            statement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
             return statement;
         }, keyHolder);
 
