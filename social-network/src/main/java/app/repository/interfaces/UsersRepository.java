@@ -8,4 +8,6 @@ public interface UsersRepository extends CrudRepository<Long, User> {
 
     Optional<User> findByEmail(String email);
 
+    void updateAvaPath(Long userId, String newPath);
+
 }

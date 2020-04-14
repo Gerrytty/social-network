@@ -1,6 +1,7 @@
 package app.config;
 
 import org.springframework.context.annotation.*;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
@@ -17,6 +18,7 @@ public class ApplicationContextConfig {
         viewResolver.setCache(true);
         viewResolver.setPrefix("");
         viewResolver.setSuffix(".ftl");
+        viewResolver.setRequestContextAttribute("rc");
 
         return viewResolver;
     }
@@ -31,5 +33,16 @@ public class ApplicationContextConfig {
         return config;
     }
 
+    @Bean
+    public CommonsMultipartResolver multipartResolver() {
+        int maxUploadSizeInMb = 5 * 1024 * 1024;
+
+        CommonsMultipartResolver cmr = new CommonsMultipartResolver();
+        cmr.setMaxUploadSize(maxUploadSizeInMb * 2);
+        cmr.setMaxUploadSizePerFile(maxUploadSizeInMb);
+
+        return cmr;
+
+    }
 
 }

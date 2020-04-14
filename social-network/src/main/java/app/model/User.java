@@ -33,4 +33,6 @@ public class User {
     private String town;
     private Date birthDate;
 
+    private String pathToAva;
+
 }

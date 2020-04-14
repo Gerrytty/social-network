@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class RootController {
 
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
     public String getRootPage(Authentication authentication) {
@@ -18,6 +17,5 @@ public class RootController {
             return "redirect:/auth";
         }
     }
-
 
 }

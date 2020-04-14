@@ -8,6 +8,7 @@
     <context:component-scan base-package="app"/>
     <mvc:annotation-driven/>
 
-<!--        <bean id="showReg" class="app.controller.RegController"/>-->
+<!--    <mvc:resources mapping="http://localhost:8085/static/**" location="/static/"/>-->
+    <mvc:resources mapping="/static/**" location="/static/"/>
 
 </beans>

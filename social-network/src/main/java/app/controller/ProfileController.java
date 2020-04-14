@@ -34,7 +34,7 @@ public class ProfileController {
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ModelAndView show(Authentication authentication, @RequestParam(defaultValue = "1") Long id) {
 
-        Logger.green_write("GET METHOD FROM ProfileController");
+        Logger.green_write("Get method from ProfileController");
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("profile");
@@ -63,19 +63,10 @@ public class ProfileController {
 
         }
 
-        try {
-            modelAndView.addObject("user", profileService.getProfileInfo(user));
-
-            modelAndView.addObject("authUserId", authUserId);
-            modelAndView.addObject("posts", postService.getPosts(id));
-            modelAndView.addObject("id", id);
-
-        } catch (NotBoundException e) {
-
-            e.printStackTrace();
-
-            modelAndView.setViewName("error");
-        }
+        modelAndView.addObject("user", profileService.getProfileInfo(user));
+        modelAndView.addObject("authUserId", authUserId);
+        modelAndView.addObject("posts", postService.getPosts(id));
+        modelAndView.addObject("id", id);
 
         return modelAndView;
     }

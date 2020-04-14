@@ -24,9 +24,11 @@ public class UsersRepositoryJdbcTemplateImpl implements UsersRepository {
     private static final String SQL_SELECT_ALL = "select * from socialNetworkUser";
     //language=SQL
     private static final String SQL_INSERT = "insert into socialNetworkUser(firstName, secondName," +
-            "email, password) values (?, ?, ?, ?)";
+            "email, password, pathToAva) values (?, ?, ?, ?, '/static/ava.jpg')";
 
     private static final String SQL_SELECT_BY_EMAIL = "select * from socialNetworkUser where email = ?";
+
+    private static final String SQL_UPDATE_AVA_PATH = "update socialNetworkUser set pathToAva = ? where userId = ?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -41,6 +43,7 @@ public class UsersRepositoryJdbcTemplateImpl implements UsersRepository {
                     .birthDate(row.getDate("birthDate"))
                     .phone(row.getString("phone"))
                     .town(row.getString("town"))
+                    .pathToAva(row.getString("pathToAva"))
                     .build();
 
 
@@ -86,6 +89,18 @@ public class UsersRepositoryJdbcTemplateImpl implements UsersRepository {
     }
 
     public void delete(Long id) {
+
+    }
+
+    public void updateAvaPath(Long userId, String newPath) {
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement statement = connection
+                    .prepareStatement(SQL_UPDATE_AVA_PATH);
+            statement.setString(1, newPath);
+            statement.setLong(2, userId);
+            return statement;
+        });
 
     }
 }

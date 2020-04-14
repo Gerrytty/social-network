@@ -18,4 +18,5 @@ public class ProfileInfoDto {
     private Date birthDate;
     private String town;
 
+    private String pathToAva;
 }
