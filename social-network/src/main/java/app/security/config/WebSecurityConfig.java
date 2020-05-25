@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
@@ -39,7 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users", "/profile", "/addPost", "/chat").authenticated()
                 .antMatchers("/static/**").permitAll()
 
-                .and().csrf().disable()
+//                .and().csrf().disable()
+                .and()
 
                 .formLogin()
                 .loginPage("/auth")
@@ -50,6 +52,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedPage("/profile")
                 .and().rememberMe().rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository);
+
+        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/auth")
+                .deleteCookies("JSESSIONID", "remember-me")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true);
 
     }
 
