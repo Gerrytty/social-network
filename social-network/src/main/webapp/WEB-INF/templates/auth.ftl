@@ -14,7 +14,6 @@
     <input type="email" name="email" placeholder="Enter your email..."> </br> </br>
     <input type="password" name="password" placeholder="Enter your password..."></br> </br>
     <input type="checkbox" name="remember-me"> Remember me <br><br>
-    <input type="hidden" value="${_csrf.token}" name="${_csrf.parameterName}">
     <input type="submit" placeholder="Sign in">
 
 </form>
