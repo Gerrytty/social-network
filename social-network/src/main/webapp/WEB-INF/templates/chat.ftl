@@ -10,13 +10,12 @@
             src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
             crossorigin="anonymous"></script>
-    <script src="../static/chat.js"></script>
 
     <script>
 
-        function sendMessage(pageId, text) {
+        function sendMessage(reciverId, text) {
             var body = {
-                pageId: pageId,
+                reciverId: reciverId,
                 text: text
             };
 
@@ -28,22 +27,22 @@
                 dataType: "json",
                 complete: function () {
                     if (text === 'Login') {
-                        receiveMessage(pageId)
+                        receiveMessage(reciverId)
                     }
                 }
             });
         }
 
         // LONG POLLING
-        function receiveMessage(pageId) {
+        function receiveMessage(reciverId) {
             $.ajax({
-                url: "/messages?pageId=" + pageId,
+                url: "/messages?reciverId=" + reciverId,
                 method: "GET",
                 dataType: "json",
                 contentType: "application/json",
                 success: function (response) {
                     $('#messages').first().after('<li>' + response[0]['text'] + '</li>');
-                    receiveMessage(pageId);
+                    receiveMessage(reciverId);
                 }
             })
         }
@@ -51,11 +50,11 @@
     </script>
 
 </head>
-<body onload="sendMessage('${pageId}', 'Login')">
-<h1>You'r id - ${pageId}</h1>
+<body onload="sendMessage(${senderId}, 'Login')">
+<h1>You'r id - ${senderId}</h1>
 <div>
     <input id="message" placeholder="Your message">
-    <button onclick="sendMessage('${pageId}',
+    <button onclick="sendMessage('${reciverId}',
             $('#message').val())">Send</button>
 </div>
 <div>

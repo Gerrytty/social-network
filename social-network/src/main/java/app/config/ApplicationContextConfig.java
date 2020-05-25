@@ -1,15 +1,20 @@
 package app.config;
 
 import org.springframework.context.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
+
+import java.util.Properties;
 
 
 @Configuration
 @PropertySource("classpath:application.properties")
-public class ApplicationContextConfig {
+public class ApplicationContextConfig implements WebMvcConfigurer {
 
     @Bean(name = "viewResolver")
     public ViewResolver getViewResolver() {
@@ -30,6 +35,11 @@ public class ApplicationContextConfig {
         // Folder containing FreeMarker templates.
         config.setTemplateLoaderPath("/WEB-INF/templates/");
 
+        Properties properties = new Properties();
+
+        properties.setProperty("auto_import", "spring.ftl as spring");
+        config.setFreemarkerSettings(properties);
+
         return config;
     }
 
@@ -45,4 +55,8 @@ public class ApplicationContextConfig {
 
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

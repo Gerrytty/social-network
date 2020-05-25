@@ -7,29 +7,49 @@ import app.util.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
+
 @Controller
 public class RegistrationController {
 
-    @Autowired
-    AuthServiceImpl authService;
+    private final AuthServiceImpl authService;
+
+    public RegistrationController(AuthServiceImpl authService) {
+        this.authService = authService;
+    }
 
     @RequestMapping(value = "/reg", method = RequestMethod.GET)
-    public ModelAndView showReg() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("reg");
-        return modelAndView;
+    public String showReg(Model model) {
+
+        model.addAttribute("registrationDto", new RegistrationDto());
+
+        return "reg";
     }
 
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
-    public String register(Model model, @ModelAttribute("registration") RegistrationDto registrationDto) {
+    public String register(@Valid @ModelAttribute("registrationDto")
+                                       RegistrationDto registrationDto,
+                           BindingResult bindingResult) {
+
         Logger.green_write("Post method from regController");
 
-        User user = authService.register(registrationDto);
+        User user;
+
+        if(bindingResult.hasErrors()) {
+            Logger.red_write("HAS ERRORS");
+            return "reg";
+        }
+
+        else {
+            Logger.green_write("NO ERRORS");
+            user = authService.register(registrationDto);
+        }
 
         if(user != null) {
             return "redirect:/profile?id=" + user.getUserId();

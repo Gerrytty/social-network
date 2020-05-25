@@ -10,11 +10,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthServiceImpl {
 
-    @Autowired
-    UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public AuthServiceImpl(PasswordEncoder passwordEncoder, UsersRepository usersRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.usersRepository = usersRepository;
+    }
 
     public User register(RegistrationDto dto) {
 

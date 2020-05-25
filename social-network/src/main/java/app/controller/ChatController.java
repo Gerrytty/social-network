@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
@@ -21,16 +22,19 @@ public class ChatController {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/chat", method = RequestMethod.GET)
-    public ModelAndView show(Authentication authentication) {
+    public ModelAndView show(@RequestParam Long reciverId, Authentication authentication) {
 
         Logger.green_write("GET METHOD FROM ChatController");
+
+        System.out.println(reciverId);
 
         Optional<User> optionalUser = (Optional<User>) authentication.getPrincipal();
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("chat");
 
-        modelAndView.addObject("pageId", optionalUser.get().getUserId());
+        modelAndView.addObject("senderId", optionalUser.get().getUserId()); // pageId
+        modelAndView.addObject("reciverId", reciverId);
         modelAndView.addObject("allMessages", messagesService.getMessages());
 
         return modelAndView;

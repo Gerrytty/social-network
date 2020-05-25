@@ -2,6 +2,7 @@ package app.controller;
 
 import app.repository.interfaces.UsersRepository;
 
+import app.security.details.UserDetailsImpl;
 import org.springframework.security.core.Authentication;
 import app.model.User;
 import app.service.PostServiceImpl;
@@ -10,51 +11,50 @@ import app.util.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.rmi.NotBoundException;
 import java.util.Optional;
 
 @Controller
 public class ProfileController {
 
-    @Autowired
-    ProfileServiceImpl profileService;
+    private final ProfileServiceImpl profileService;
+    private final PostServiceImpl postService;
+    private final UsersRepository usersRepository;
 
     @Autowired
-    PostServiceImpl postService;
-
-    @Autowired
-    UsersRepository usersRepository;
+    public ProfileController(ProfileServiceImpl profileService, PostServiceImpl postService, UsersRepository usersRepository) {
+        this.profileService = profileService;
+        this.postService = postService;
+        this.usersRepository = usersRepository;
+    }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public ModelAndView show(Authentication authentication, @RequestParam(defaultValue = "1") Long id) {
+    public String show(Authentication authentication, @RequestParam(defaultValue = "1") Long id, Model model) {
 
         Logger.green_write("Get method from ProfileController");
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("profile");
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        Optional<User> optionalUser = (Optional<User>) authentication.getPrincipal();
-
-        long authUserId = optionalUser.get().getUserId();
+        long authUserId = userDetails.getUser().getUserId();
 
         User user = new User();
 
         if(id == 1) {
-            user = optionalUser.get();
+            user = userDetails.getUser();
             id = user.getUserId();
         }
 
         else {
-            optionalUser = usersRepository.find(id);
+            Optional<User> optionalUser = usersRepository.find(id);
 
             if(!optionalUser.isPresent()) {
-                modelAndView.setViewName("error");
+                model.addAttribute("error");
             }
 
             else {
@@ -63,12 +63,12 @@ public class ProfileController {
 
         }
 
-        modelAndView.addObject("user", profileService.getProfileInfo(user));
-        modelAndView.addObject("authUserId", authUserId);
-        modelAndView.addObject("posts", postService.getPosts(id));
-        modelAndView.addObject("id", id);
+        model.addAttribute("user", profileService.getProfileInfo(user));
+        model.addAttribute("authUserId", authUserId);
+        model.addAttribute("posts", postService.getPosts(id));
+        model.addAttribute("id", id);
 
-        return modelAndView;
+        return "profile";
     }
 
 }

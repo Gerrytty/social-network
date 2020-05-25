@@ -105,6 +105,12 @@
                 </#if>
             </div>
 
+            <div class="row">
+                <#if authUserId != id>
+                    <a href="/chat?reciverId=${id}">Send message</a>
+                </#if>
+            </div>
+
         </div>
 
     </div>

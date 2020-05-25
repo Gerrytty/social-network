@@ -1,7 +1,7 @@
 package app.controller;
 
 import app.dto.UploadForm;
-import app.model.User;
+import app.security.details.UserDetailsImpl;
 import app.service.FilesUploadServiceImpl;
 import app.util.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +12,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.annotation.MultipartConfig;
-import java.util.Optional;
 
 @Controller
 @MultipartConfig
 public class FilesController {
 
+    private final FilesUploadServiceImpl filesUploadService;
+
     @Autowired
-    FilesUploadServiceImpl filesUploadService;
+    public FilesController(FilesUploadServiceImpl filesUploadService) {
+        this.filesUploadService = filesUploadService;
+    }
 
     @PostMapping("/avaUpload")
     @PreAuthorize("isAuthenticated()")
@@ -27,8 +30,8 @@ public class FilesController {
 
         Logger.green_write("Post method from FilesController");
 
-        form.setUserId(((Optional<User>) authentication.getPrincipal()).get().getUserId());
-
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        form.setUserId(userDetails.getUser().getUserId());
         filesUploadService.upload(form);
 
         return "redirect:/profile";

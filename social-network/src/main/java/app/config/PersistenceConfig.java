@@ -15,6 +15,8 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
@@ -28,8 +30,12 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class PersistenceConfig {
 
+    private final Environment environment;
+
     @Autowired
-    private Environment environment;
+    public PersistenceConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public DataSource dataSource() {
@@ -82,5 +88,12 @@ public class PersistenceConfig {
     @Bean
     public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslator() {
         return new PersistenceExceptionTranslationPostProcessor();
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource());
+        return jdbcTokenRepository;
     }
 }

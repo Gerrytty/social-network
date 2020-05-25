@@ -19,6 +19,8 @@ public class MessagesController {
 
     private static final Map<String, List<MessageDto>> messages = new HashMap<>();
 
+    private static final Map<Chat, List<MessageDto>> map = new HashMap<>();
+
     @Autowired
     MessagesServiceImpl messagesService;
 
@@ -26,9 +28,20 @@ public class MessagesController {
     @RequestMapping(value = "/messages", method = RequestMethod.POST)
     public ResponseEntity<Object> receiveMessage(@RequestBody MessageDto message) {
 
+        System.out.println(message);
+
         if(!message.getText().equals("Login")) {
             messagesService.addMessage(message);
         }
+
+        String text = message.getText();
+        String senderId = message.getSenderId();
+        String reciverId = message.getReciverId();
+
+        System.out.println(text);
+        System.out.println(senderId);
+        System.out.println(reciverId);
+
 
         // если сообщений с этой или для этой страницы еще не было
         if (!messages.containsKey(message.getPageId())) {
@@ -53,20 +66,24 @@ public class MessagesController {
     // получить все сообщения для текущего запроса
     @SneakyThrows
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
-    public ResponseEntity<List<MessageDto>> getMessagesForPage(@RequestParam("pageId") String pageId) {
+    public ResponseEntity<List<MessageDto>> getMessagesForPage(@RequestParam Long reciverId) {
 
-        // получили список сообшений для страницы и заблокировали его
-        synchronized (messages.get(pageId)) {
-            // если нет сообщений уходим в ожидание
-            if (messages.get(pageId).isEmpty()) {
-                messages.get(pageId).wait();
-            }
-        }
+        System.out.println("Get method + reciver id = " + reciverId);
 
-        // если сообщения есть - то кладем их в новых список
-        List<MessageDto> response = new ArrayList<>(messages.get(pageId));
-        // удаляем сообщения из мапы
-        messages.get(pageId).clear();
-        return ResponseEntity.ok(response);
+//        // получили список сообшений для страницы и заблокировали его
+//        synchronized (messages.get(pageId)) {
+//            // если нет сообщений уходим в ожидание
+//            if (messages.get(pageId).isEmpty()) {
+//                messages.get(pageId).wait();
+//            }
+//        }
+//
+//        // если сообщения есть - то кладем их в новых список
+//        List<MessageDto> response = new ArrayList<>(messages.get(pageId));
+//        // удаляем сообщения из мапы
+//        messages.get(pageId).clear();
+//        return ResponseEntity.ok(response);
+
+        return ResponseEntity.ok(new ArrayList<>());
     }
 }
