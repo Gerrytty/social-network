@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
@@ -22,6 +20,7 @@ public class RegistrationDto {
     @Size(min = 1, message = "Should not be empty")
     private String secondName;
 
+    @Size(min = 1, message = "Should not be empty")
     @Email(message = "Email is not correct")
     private String email;
 

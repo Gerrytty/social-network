@@ -6,7 +6,13 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Registration</title>
+    <title><@spring.message "reg.page.title"/></title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/reg.css" rel="stylesheet">
 
     <style>
         .error {
@@ -17,37 +23,64 @@
 </head>
 <body>
 
-<#--<form method="post" action="reg">-->
+<br>
+<header>
 
-<#--    <input type="text" name="firstName" placeholder="First name..."> </br> </br>-->
-<#--    <input type="text" name="secondName" placeholder="Second name..."> </br> </br>-->
-<#--    <input type="email" name="email" placeholder="Email..."> </br> </br>-->
-<#--    <input type="password" name="password" placeholder="Password..."> </br> </br>-->
-<#--    <input type="submit" placeholder="Register">-->
+    <div class="row">
 
-    <div>
-        <@spring.bind "registrationDto"/>
-        <form class="form-signup" action="reg" method="post">
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col">
+            <h2><@spring.message "reg.page.title"/></h2>
 
-            First name: <br>
-            <@spring.formInput "registrationDto.firstName"/>
-            <@spring.showErrors "<br>", "error"/>
-            <br>Second name: <br>
-            <@spring.formInput "registrationDto.secondName"/>
-            <@spring.showErrors "<br>", "error"/>
-            <br>Email: <br>
-            <@spring.formInput "registrationDto.email"/>
-            <@spring.showErrors "<br>", "error"/>
-            <br>Password: <br>
-            <@spring.formPasswordInput "registrationDto.password"/>
-            <@spring.showErrors "<br>","error"/> <br>
-            <br><br>
-            <input class="btn btn-lg btn-dark btn-block" type="submit" name="submit" id="submit" value="Sign up">
-        </form>
+        </div>
+        <div class="col">
+        </div>
+        <div class="col"></div>
+
     </div>
 
+</header>
 
-<#--</form>-->
+<br>
+
+    <div class="row">
+
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col">
+
+            <div>
+                <@spring.bind "registrationDto"/>
+                <form class="form-signup" action="/reg" method="post">
+
+                    <@spring.message "firstName"/>: <br>
+                    <@spring.formInput "registrationDto.firstName"/> <br>
+                    <@spring.showErrors "<br>", "error"/>
+                    <br><@spring.message "secondName"/>: <br>
+                    <@spring.formInput "registrationDto.secondName"/> <br>
+                    <@spring.showErrors "<br>", "error"/>
+                    <br><@spring.message "email"/>: <br>
+                    <@spring.formInput "registrationDto.email"/> <br>
+                    <@spring.showErrors "<br>", "error"/>
+                    <br><@spring.message "password"/>: <br>
+                    <@spring.formPasswordInput "registrationDto.password"/> <br>
+                    <@spring.showErrors "<br>","error"/> <br>
+                    <br>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    <input class="btn btn-lg btn-dark btn-block" type="submit" name="submit" id="submit"
+                           value=<@spring.message "reg.page.sign-up"/>>
+                </form>
+            </div>
+
+        </div>
+        <div class="col">
+
+        </div>
+
+        <div class="col"></div>
+
+    </div>
 
 </body>
 </html>

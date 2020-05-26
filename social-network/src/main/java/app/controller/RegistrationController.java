@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,12 +28,15 @@ public class RegistrationController {
     @RequestMapping(value = "/reg", method = RequestMethod.GET)
     public String showReg(Model model) {
 
+        Logger.green_write("Get method from RegistrartionController");
+
         model.addAttribute("registrationDto", new RegistrationDto());
 
         return "reg";
     }
 
-    @RequestMapping(value = "/reg", method = RequestMethod.POST)
+
+    @PostMapping(value = "/reg")
     public String register(@Valid @ModelAttribute("registrationDto")
                                        RegistrationDto registrationDto,
                            BindingResult bindingResult) {
